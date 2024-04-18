@@ -1,2 +1,2 @@
 
-  int total_num= 0, quiz_num = 0;
+  cout << ROT13(input);
