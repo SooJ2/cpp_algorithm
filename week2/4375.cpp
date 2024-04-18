@@ -5,28 +5,25 @@ using namespace std;
 
 int find(int input){
   string tmp = "";
-  int count = to_string(input).length();
-  tmp.append(count,'1');
-  long long ones = stoll(tmp);
-  tmp = "";
-  tmp.append(count,'0'); tmp[0] = '1';
-  long long trial = stoll(tmp);
+  long long count = 1, ones = 1;
+
   while(true){
-    // cout << "ones: " << ones << ", trial: " << trial << " | ";
+    // cout << "ones: " << ones << ", count: " << count << " | ";
     if (ones % input == 0){
-      return to_string(ones).length();
+      return count;
     }
-    trial *= 10; 
-    ones += trial;
+    ones = ones * 10 + 1;
+    ones %= input;
+    count ++;
   }
-  return -1; 
 }
 
 int main(){
   ios_base::sync_with_stdio(false);
   cin.tie(NULL); cout.tie(NULL);
   int input = 0;
-  while (cin >> input){
+  while (!cin.eof()){
+    cin >> input;
     cout << find(input) << endl;
   }
 
