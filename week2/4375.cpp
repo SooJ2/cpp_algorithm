@@ -22,8 +22,7 @@ int main(){
   ios_base::sync_with_stdio(false);
   cin.tie(NULL); cout.tie(NULL);
   int input = 0;
-  while (!cin.eof()){
-    cin >> input;
+  while (cin >> input){
     cout << find(input) << endl;
   }
 
