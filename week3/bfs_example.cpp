@@ -9,8 +9,8 @@ int map[100][100];
 int M,N,cy,cx;
 
 void BFS(int y, int x){
-  queue<int> qy,qx;
-  qy.push(y); qx.push(x);
+  queue<int> qy,qx; // pairt<int,int>사용가능 
+  qy.push(y); qx.push(x); // q.push({y,x})
   visited[y][x] = 1;
 
   while(qy.size()){
