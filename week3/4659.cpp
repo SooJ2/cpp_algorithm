@@ -1,12 +1,13 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
-// char vowels[] = {'a','e','i','o','u'}; // consonant
+char vowels[] = {'a','e','i','o','u'}; // consonant
 bool test(string input){
     int cont_vow = 0, cont_cons = 0, vow_count = 0;
     char prev_c = 'A';
     for(char c : input){
-      if(c =='a' || c=='e' || c=='i' || c=='o' || c=='u'){
+      if(find(vowels,vowels+5,c) != vowels+5){
         cont_vow += 1;
         cont_cons = 0;
         vow_count += 1;
