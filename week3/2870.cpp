@@ -4,68 +4,73 @@
 #include <algorithm>
 
 using namespace std;
-vector<int> digits;
-
-// void find_digit(string input){
-//   int start = 0, prev = -1;
-//   for(int i = 1; i <= input.length(); i++){
-//     // cout << start << "," << i <<": [" <<input.substr(start,i) << "] " << atoi(input.substr(start,i).c_str()) <<endl;
-//     if((atoi(input.substr(start,i).c_str()) == 0) && input.substr(start,i) != "0"){
-//       if(prev != -1) digits.push_back(prev);
-//       cout << ">>>" <<  input.substr(start,i) << endl;
-      
-//       start = i;
-//       prev = -1;
-//       continue;
-//     }
-//     prev = atoi(input.substr(start,i).c_str());
-//   }
-//   if(prev != -1) digits.push_back(prev);
-// }
-
-// void find_digit(string input){
-//   // for(int i = 0; i < input.length(); i++){
-
-//   // }
-//   int start = 0, len = 1, prev = -1;
-//   while(start < input.length() && len <= input.length()){
-//     // cout << start << "," <<len <<": [" <<input.substr(start,len) << "] " << atoi(input.substr(start,len).c_str()) <<endl;
-//     if(atoi(input.substr(start,len).c_str()) == 0 && input.substr(start,len) != "0"){
-//       //not a digit
-//       if(prev != -1){
-//         digits.push_back(prev);
-//       }
-//       start = start+len;
-//       len = 1; prev = -1;
-//       continue;
-//     }
-//     prev = atoi(input.substr(start,len).c_str());
-//     len++;
-//   }
-//   if(prev != -1){
-//     digits.push_back(prev);
-//   }
-// }
+vector<string> digits;
 
 void find_digit(string input){
 
-  int start = 0, len = 1, prev = -1;
+  int start = 0, len = 1;
+  string prev = "";
   for(int i = 0; i < input.length(); i++){
     // cout << start << "," <<len <<": [" <<input.substr(start,len) << "] " << atoi(input.substr(start,len).c_str()) <<endl;
     if(isdigit(input[i])== 0 && input.substr(start,len) != "0"){
       //not a digit
-      if(prev != -1){
-        digits.push_back(prev);
+      if(prev != ""){
+        while(prev[0] == '0' && prev.length() > 1) prev = prev.substr(1,prev.length()-1);
+        if(digits.size() ==0) digits.push_back(prev);
+        else{
+          //자리찾아서
+          int j;
+          for(j = 0; j < digits.size(); j++){
+            if(prev.length() < digits[j].length()){
+              digits.insert(digits.begin()+j,prev);
+              break;
+            }else if (prev.length() == digits[j].length()){
+              int k;
+              for(k = 0; k < prev.length(); k++){
+                if(prev[k] < digits[j][k]){
+                  digits.insert(digits.begin()+j,prev);
+                  break;
+                }
+              }
+              // if(k==prev.length())continue;
+              if(k != prev.length()) break;
+
+            }
+          }
+          if(j==digits.size()) digits.push_back(prev);
+        }
       }
-      start = start+len;
-      len = 1; prev = -1;
+      start = i+1;
+      len = 1; prev = "";
       continue;
     }
-    prev = atoi(input.substr(start,len).c_str());
+    prev = input.substr(start,len);
     len++;
   }
-  if(prev != -1){
-    digits.push_back(prev);
+  if(prev != ""){
+    while(prev[0] == '0' && prev.length() > 1) prev = prev.substr(1,prev.length()-1);
+    if(digits.size() ==0) digits.push_back(prev);
+    else{
+      //자리찾아서
+      int j;
+      for(j = 0; j < digits.size(); j++){
+        if(prev.length() < digits[j].length()){
+          digits.insert(digits.begin()+j,prev);
+          break;
+        }else if (prev.length() == digits[j].length()){
+          int k;
+          for(k = 0; k < prev.length(); k++){
+            if(prev[k] < digits[j][k]){
+              digits.insert(digits.begin()+j,prev);
+              break;
+            }
+          }
+          // if(k==prev.length())digits.insert(digits.begin()+j+1,prev);
+          if(k != prev.length()) break;
+        }
+      }
+      if(j==digits.size()) digits.push_back(prev);
+    }
   }
 }
 
@@ -80,8 +85,9 @@ int main(){
     total--;
   }
 
-  sort(digits.begin(), digits.end());
-  for(int digit: digits){
+  // sort(digits.begin(), digits.end());
+
+  for(string digit: digits){
     cout << digit << endl;
   }
 
