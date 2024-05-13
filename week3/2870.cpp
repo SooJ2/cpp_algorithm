@@ -1,75 +1,55 @@
 #include <iostream>
-#include <vector>
 #include <cctype>
-#include <algorithm>
+#include <vector>
 
 using namespace std;
 vector<string> digits;
 
-void find_digit(string input){
-
-  int start = 0, len = 1;
-  string prev = "";
-  for(int i = 0; i < input.length(); i++){
-    // cout << start << "," <<len <<": [" <<input.substr(start,len) << "] " << atoi(input.substr(start,len).c_str()) <<endl;
-    if(isdigit(input[i])== 0 && input.substr(start,len) != "0"){
-      //not a digit
-      if(prev != ""){
-        while(prev[0] == '0' && prev.length() > 1) prev = prev.substr(1,prev.length()-1);
-        if(digits.size() ==0) digits.push_back(prev);
-        else{
-          //자리찾아서
-          int j;
-          for(j = 0; j < digits.size(); j++){
-            if(prev.length() < digits[j].length()){
-              digits.insert(digits.begin()+j,prev);
-              break;
-            }else if (prev.length() == digits[j].length()){
-              int k;
-              for(k = 0; k < prev.length(); k++){
-                if(prev[k] < digits[j][k]){
-                  digits.insert(digits.begin()+j,prev);
-                  break;
-                }
-              }
-              // if(k==prev.length())continue;
-              if(k != prev.length()) break;
-
-            }
-          }
-          if(j==digits.size()) digits.push_back(prev);
-        }
-      }
-      start = i+1;
-      len = 1; prev = "";
-      continue;
-    }
-    prev = input.substr(start,len);
-    len++;
+string check_zero(string digit){
+  while(digit[0] == '0' && digit.length() > 1){
+    digit = digit.substr(1,digit.length());
   }
-  if(prev != ""){
-    while(prev[0] == '0' && prev.length() > 1) prev = prev.substr(1,prev.length()-1);
-    if(digits.size() ==0) digits.push_back(prev);
-    else{
-      //자리찾아서
-      int j;
-      for(j = 0; j < digits.size(); j++){
-        if(prev.length() < digits[j].length()){
-          digits.insert(digits.begin()+j,prev);
-          break;
-        }else if (prev.length() == digits[j].length()){
-          int k;
-          for(k = 0; k < prev.length(); k++){
-            if(prev[k] < digits[j][k]){
-              digits.insert(digits.begin()+j,prev);
-              break;
-            }
-          }
-          // if(k==prev.length())digits.insert(digits.begin()+j+1,prev);
-          if(k != prev.length()) break;
+  return digit;
+}
+
+void put_digit_in_digits(string digit){
+  vector<string>::iterator iter;
+  for(iter = digits.begin(); iter != digits.end(); iter++){
+    if(digit.length() < ((string)*iter).length()){
+      digits.insert(iter,digit);
+      break;
+    }else if(((string)*iter).length() == digit.length()){      
+      if(digit < ((string)*iter)){
+        digits.insert(iter,digit);
+        break;
+      }     
+    }
+  }
+  if(iter == digits.end()) digits.push_back(digit);
+}
+
+void find_digits(string input){
+  string digit = "";
+  for(char c: input){
+    if(isdigit(c) == 0 && c != '0'){
+      //not a digit
+      if(digit != ""){
+        if(digits.size() == 0) digits.push_back(check_zero(digit));
+        else{
+          //put digit in digits on proper index
+          put_digit_in_digits(check_zero(digit));
         }
+        digit = "";
       }
-      if(j==digits.size()) digits.push_back(prev);
+    }else{
+      digit += c;
+    }
+  }
+  if(digit != ""){
+    if(digits.size() == 0) digits.push_back(check_zero(digit));
+    else{
+      //put digit in digits on proper index
+      put_digit_in_digits(check_zero(digit));
     }
   }
 }
@@ -81,14 +61,11 @@ int main(){
   string input;
   while(total){
     cin >> input;
-    find_digit(input);
+    find_digits(input);
     total--;
   }
-
-  // sort(digits.begin(), digits.end());
 
   for(string digit: digits){
     cout << digit << endl;
   }
-
 }
