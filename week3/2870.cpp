@@ -1,9 +1,17 @@
 #include <iostream>
 #include <cctype>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 vector<string> digits;
+
+bool cmp(string a, string b){
+  if(a.length() == b.length()){
+    return a < b;
+  }
+  return a.length() < b.length();
+}
 
 string check_zero(string digit){
   while(digit[0] == '0' && digit.length() > 1){
@@ -12,33 +20,13 @@ string check_zero(string digit){
   return digit;
 }
 
-void put_digit_in_digits(string digit){
-  vector<string>::iterator iter;
-  for(iter = digits.begin(); iter != digits.end(); iter++){
-    if(digit.length() < ((string)*iter).length()){
-      digits.insert(iter,digit);
-      break;
-    }else if(((string)*iter).length() == digit.length()){      
-      if(digit < ((string)*iter)){
-        digits.insert(iter,digit);
-        break;
-      }     
-    }
-  }
-  if(iter == digits.end()) digits.push_back(digit);
-}
-
 void find_digits(string input){
   string digit = "";
   for(char c: input){
     if(isdigit(c) == 0 && c != '0'){
       //not a digit
       if(digit != ""){
-        if(digits.size() == 0) digits.push_back(check_zero(digit));
-        else{
-          //put digit in digits on proper index
-          put_digit_in_digits(check_zero(digit));
-        }
+        digits.push_back(check_zero(digit));
         digit = "";
       }
     }else{
@@ -46,13 +34,11 @@ void find_digits(string input){
     }
   }
   if(digit != ""){
-    if(digits.size() == 0) digits.push_back(check_zero(digit));
-    else{
-      //put digit in digits on proper index
-      put_digit_in_digits(check_zero(digit));
-    }
+    digits.push_back(check_zero(digit));
   }
 }
+
+
 
 int main(){
   int total;
@@ -65,6 +51,7 @@ int main(){
     total--;
   }
 
+  sort(digits.begin(), digits.end(),cmp);
   for(string digit: digits){
     cout << digit << endl;
   }
