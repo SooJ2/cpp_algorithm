@@ -28,8 +28,6 @@ int find_safe_area(int** polluted_map){
 }
 
 void DFS(int y, int x, int ** polluted_map){
-  // cout << "DFS" << endl;
-  // cout << "(" << y << "," << x << ")"<<endl;
   polluted_map[y][x] = 2;
   for(int i = 0; i < 4; i++){
     int ny,nx;
@@ -38,17 +36,9 @@ void DFS(int y, int x, int ** polluted_map){
     if(polluted_map[ny][nx] != 0) continue;
     DFS(ny,nx,polluted_map);
   }
-  // for(int i = 0; i < N; i++){
-  //   for(int j = 0; j < M; j++){
-  //     cout << polluted_map[i][j] << " ";
-  //   }
-  //   cout << endl;
-  // }
-  // cout << endl;
 }
 
 void pollute(){
-  // cout << "POLLUTE" << endl;
   int **polluted_map = new int*[8];
   for(int i = 0; i < N; i++){
     polluted_map[i] = new int[8];
@@ -60,14 +50,11 @@ void pollute(){
   for(int i = 0; i < N; i++){
     for(int j = 0; j < M; j++){
       if(map[i][j] != 2) continue;
-      // cout << "START DFS" << endl;
       DFS(i,j,polluted_map);
-      // cout << "END DFS" << endl;
     }
   }
 
   int safe_area = find_safe_area(polluted_map);
-  // cout << safe_area << endl;
   if(safe_area > maximum) maximum = safe_area;
   return;
 }
@@ -96,16 +83,7 @@ int main(){
     }
   }
 
-  // cout << "FIND SOLUTION" << "\n";
   find_solution(0);
-  // cout << "END FIND SOLUTION" << "\n";
 
   cout << maximum << "\n";
 }
-
-/*
-0 0 0 0 0 0
-1 0 0 0 0 2
-1 1 1 0 0 2
-0 0 0 0 0 2
-*/
