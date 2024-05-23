@@ -1,9 +1,5 @@
 #include <iostream>
 
-// #define SAFE 0;
-// #define WALL 1;
-// #define VIRUS 2;
-
 using namespace std;
 
 int N,M,maximum = 0;
@@ -12,18 +8,12 @@ int dy[4] = {-1,0,1,0};
 int dx[4] = {0,1,0,-1};
 
 int find_safe_area(int** polluted_map){
-  // cout << "FIND SAFE AREA" << endl;
   int safe_area = 0;
   for(int i = 0; i < N; i++){
     for(int j = 0; j < M; j++){
       if(polluted_map[i][j] == 0) safe_area++;
-      // cout << polluted_map[i][j] << " ";
     }
-    // cout << endl;
   }
-  // cout << endl;
-  // cout << "END FIND SAFE AREA" << endl;
-
   return safe_area;
 }
 
