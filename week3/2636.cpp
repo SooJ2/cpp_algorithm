@@ -3,7 +3,7 @@
 using namespace std;
 
 int M,N;
-int **map, **next_map, **visited;
+int map[100][100], next_map[100][100], visited[100][100];
 int cheese, prev_cheese = 0;
 
 int dy[4] = {-1,0,1,0}, dx[4] ={0,1,0,-1};
@@ -47,16 +47,7 @@ void melting_cheese(int y, int x){
 
 int main(){
   cin >> N >> M;
-  map = new int*[N];
-  next_map = new int*[N];
-
-  visited = new int*[N];
   for(int i = 0; i < N; i++){
-    map[i] = new int[M];
-    next_map[i] = new int[M];
-
-
-    visited[i] = new int[M];
     for(int j = 0; j < M; j++){
       cin >> map[i][j];
       if(map[i][j]) cheese++;
@@ -100,14 +91,7 @@ int main(){
   cout << trial << "\n";
   cout << prev_cheese << "\n";
 
-  for(int i = 0; i < N; i++){
-    delete map[i];
-    delete next_map[i];
-    delete visited[i];
-  }
-  delete map;
-  delete next_map;
-  delete visited;
+  return 0;
 }
 
 /*
