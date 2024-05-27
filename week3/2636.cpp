@@ -9,7 +9,6 @@ int cheese, prev_cheese = 0;
 int dy[4] = {-1,0,1,0}, dx[4] ={0,1,0,-1};
 
 void find_edge(int y, int x){
-  // cout << "\tCHECK " << y << ", " << x << "\n";
   visited[y][x] = 1;
   map[y][x] = 2;
   next_map[y][x] = 2;
@@ -23,7 +22,6 @@ void find_edge(int y, int x){
 }
 
 void melting_cheese(int y, int x){
-  // cout << "CHECK " << y << "," << x << "\n";
   visited[y][x] = 1; //true
   if(map[y][x] == 1)
     next_map[y][x] = 1;
@@ -31,18 +29,13 @@ void melting_cheese(int y, int x){
   for(int i = 0; i < 4; i++){
     int ny = y + dy[i];
     int nx = x + dx[i];
-    // if(y==11){
-    //   cout << "  " << y << "," << x << ")NEXT: "<<ny <<", "<<nx<<"\n";
-    // }
+
     if(ny < 0 || ny >= N || nx < 0 || nx >= M) continue;
-    // cout << "AFTER MAG CHECK" << "\n";
     if(map[ny][nx] == 2){
       will_be_melted = true;
-      // cout << y <<"," << x <<" will be melted\n";
       continue;
     }
     if(visited[ny][nx]) continue;
-    // cout << "AFTER VISIT CHECK" << "\n";
     if(map[ny][nx] != 1) continue;
     melting_cheese(ny,nx);
   }
@@ -70,19 +63,13 @@ int main(){
     }
   }
 
-  //아예 치즈가 없는 겨우도 생각해보기
   int trial = 0;
   while(cheese > 0){
-    // cout << cheese << "\n";
 
-  // while(trial < 10){
-
-    // cout << trial << "] " << cheese <<"\n";
-    //visited 초기화
     for(int i = 0; i < M; i++){
       fill_n(visited[i],M,0);
     }
-    //map swap
+
     if(trial != 0){
       for(int i = 0; i < N; i++){
         for(int j = 0; j < M; j++){
@@ -91,16 +78,8 @@ int main(){
       }
     }
 
-    // cout << "FIND EDGE" << "\n";
     find_edge(0,0);
-    // for(int i = 0; i < N; i++){
-    //   for(int j = 0; j < M; j++){
-    //     cout << map[i][j] << " ";
-    //   }
-    //   cout << "\n";
-    // }
 
-    //visited 초기화
     for(int i = 0; i < M; i++){
       fill_n(visited[i],M,0);
     }
@@ -115,17 +94,20 @@ int main(){
     }
     trial++;
 
-    // for(int i = 0; i < N; i++){
-    //   for(int j = 0; j < M; j++){
-    //     cout << next_map[i][j] << " ";
-    //   }
-    //   cout << "\n";
-    // }
+
   }
 
   cout << trial << "\n";
   cout << prev_cheese << "\n";
 
+  for(int i = 0; i < N; i++){
+    delete map[i];
+    delete next_map[i];
+    delete visited[i];
+  }
+  delete map;
+  delete next_map;
+  delete visited;
 }
 
 /*
