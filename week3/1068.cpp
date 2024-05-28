@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 
 using namespace std;
@@ -16,16 +17,11 @@ void delete_nodes(int del){
     nodes.erase(del);
     return;
   }
-  // for(int i = 0; i < nodes[del].size(); i++){
-  //   delete_nodes(nodes[del][i]);
-  //   // nodes[del].erase(nodes[del].begin()+i);
-  // }
 
   while(nodes[del].size()){
     delete_nodes(nodes[del][0]);
   }
 
-  cout << del << " <- "<<parent[del] << "\n";
   vector<int>::iterator it = find(nodes[parent[del]].begin(),nodes[parent[del]].end(),del);
   nodes[parent[del]].erase(it);
   
@@ -46,22 +42,29 @@ int main(){
     nodes[input].push_back(i);
   }
 
-  // for(pair p: nodes){
-  //   cout << p.first << "] ";
-  //   for(int i: p.second){
-  //     cout << i << " ";
-  //   }
-  //   cout << "\n";
-  // }
-
   int del, answer = 0;
   cin >> del;
-  if(del != 0){
+  if(parent[del] != -1){
+    // for(pair p: nodes){
+    //   cout << p.first << "] ";
+    //   for(int i: p.second){
+    //     cout << i << " ";
+    //   }
+    //   cout << "\n";
+    // }
     delete_nodes(del);
+    // for(pair p: nodes){
+    //   cout << p.first << "] ";
+    //   for(int i: p.second){
+    //     cout << i << " ";
+    //   }
+    //   cout << "\n";
+    // }    
     for(pair p: nodes){
-      if(p.second.size()) answer ++;
+      if(!p.second.size()) answer++;
     }
   }
 
   cout << answer<<"\n";
+  return 0;
 }
