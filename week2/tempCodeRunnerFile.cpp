@@ -1,2 +1,2 @@
 
-  cout << ROT13(input);
+    if(check[A]){
