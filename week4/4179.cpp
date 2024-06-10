@@ -29,7 +29,7 @@ void fire_spread(int cd){
 
   for(int i = 0; i < R; i++){
     for(int j = 0; j < C; j++){
-      cout << m[i][j] << " ";
+      cout << m[i][j];
     }
     cout << "\n";
   }
@@ -50,7 +50,7 @@ bool find_way(int y, int x, int depth){
       fire_spread(cd);
     }
     if(m[cy][cx] == 'F') continue;
-    if(cy == 0 || cy == R-1 || cy == 0 || cy == C-1){
+    if(cy == 0 || cy == R-1 || cx == 0 || cx == C-1){
       //answer
       cout << cd + 1 << "\n";
       return true;
@@ -93,3 +93,17 @@ int main(){
   //delete
   return 0;
 }
+
+/*
+4 4
+####
+#JF#
+#..#
+#..#
+
+4 4
+####
+#.F#
+..J#
+####
+*/
