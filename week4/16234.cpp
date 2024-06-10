@@ -33,7 +33,6 @@ bool find_union(int y, int x, int depth){
   return u.size() > 1 ? true : false;
 }
 
-
 int main(){
   cin >> N >> L >> R;
 
