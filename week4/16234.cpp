@@ -11,7 +11,6 @@ int u_sum = 0;
 int dy[4] = {-1, 0, 1, 0}, dx[4] = {0, 1, 0, -1};
 
 bool find_union(int y, int x, int depth){
-  // cout <<
   visited[y][x] = 1;
   u_sum += A[y][x];
   u.push_back({y,x});
@@ -44,8 +43,6 @@ int main(){
     }
   }
 
-  // cout << "START" << "\n";
-
   int trial = 1, answer = 0;
   while(trial){
     fill(&visited[0][0],&visited[0][0]+50*50,0);
@@ -55,17 +52,7 @@ int main(){
         if(visited[i][j]) continue;
         u_sum = 0;
         u.clear();
-        bool ret = find_union(i,j,0);
-        trial += ret;
-        if(ret){
-            for(int i = 0; i < N; i++){
-              for(int j = 0; j < N; j++){
-                cout <<  A[i][j] << " ";
-              }
-              cout << "\n";
-            }
-            cout << "\n";
-        }
+        trial += find_union(i,j,0);
       }
     }
     if(trial)
