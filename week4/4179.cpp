@@ -13,27 +13,19 @@ int dy[4] = {-1, 0, 1, 0}, dx[4] = {0, 1, 0, -1};
 
 void fire_spread(int cd){
   int ny, nx;
-  vector<pair<int,int>> new_Fs;
-  for(pair<int,int> p: Fs){
+  vector<pair<int,int>> new_Fs(Fs);
+  Fs.clear();
+  for(pair<int,int> p: new_Fs){
     for(int i = 0; i < 4; i++){
       ny = p.first + dy[i]; nx = p.second + dx[i];
       if(ny < 0 || ny >= R || nx < 0 || nx >= C) continue;
       if(m[ny][nx] == 'F' || m[ny][nx] == '#') continue;
       m[ny][nx] = 'F';
-      new_Fs.push_back({ny,nx});
+      Fs.push_back({ny,nx});
     }
   }
-  Fs.clear();
-  Fs = new_Fs;
-  curr_depth = cd;
 
-  for(int i = 0; i < R; i++){
-    for(int j = 0; j < C; j++){
-      cout << m[i][j];
-    }
-    cout << "\n";
-  }
-  cout << "\n";
+  curr_depth = cd;
 }
 
 bool find_way(int y, int x, int depth){
@@ -61,6 +53,7 @@ bool find_way(int y, int x, int depth){
       if(ny < 0 || ny >= R || nx < 0 || nx >= C) continue;
       if(m[ny][nx] != '.') continue;
       if(visited[ny][nx]) continue;
+      visited[ny][nx] = true;
       q.push({ny,nx}); d.push(cd+1);
     }
 
@@ -69,6 +62,8 @@ bool find_way(int y, int x, int depth){
 }
 
 int main(){
+  ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+
   cin >> R >> C;
   m = new char*[R];
   visited = new bool*[R];
@@ -91,19 +86,12 @@ int main(){
   if(!find_way(J.first,J.second,0)) cout << "IMPOSSIBLE" << "\n";
 
   //delete
+  for(int i = 0; i < R; i++){
+    delete m[i];
+    delete visited[i];
+  }
+  delete m;
+  delete visited;
+
   return 0;
-}
-
-/*
-4 4
-####
-#JF#
-#..#
-#..#
-
-4 4
-####
-#.F#
-..J#
-####
-*/
+}//32ms
