@@ -1,5 +1,6 @@
 #include <iostream>
 #include <queue>
+#include <tuple>
 
 using namespace std;
 
@@ -16,6 +17,7 @@ void find_answer(){
   int current;
   while(q.size()){
     current = q.front(); q.pop();
+    if(current == K) return;
     for(int next:{current-1, current+1, current*2}){
       if(next >= 0 && next <= 100000){
         if(!visited[next]){
