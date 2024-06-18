@@ -1,90 +1,104 @@
 #include <iostream>
 #include <vector>
+#include <queue>
+#include <tuple>
 
 using namespace std;
 
 int R, C;
 char lake[1500][1500];
 bool visited[1500][1500];
+bool visited_swan[1500][1500];
 
 vector<pair<int,int>> swan;
 int dy[4] = {-1,0,1,0}, dx[4] = {0,1,0,-1};
+queue<pair<int,int>> water;
+queue<pair<int,int>> s, ns;
 
-void find_answer(int y, int x){
-  visited[y][x] = true;
-
-  int ny,nx;
-  for(int i = 0; i < 4; i++){
-    ny = y + dy[i]; nx = x + dx[i];
-    if(ny < 0 || ny >= R || nx < 0 || nx >= C) continue;
-    if(visited[ny][nx]) continue;
-    visited[ny][nx] = true;
-    if(lake[ny][nx] == 'X'){
-      lake[ny][nx] = '.';
-      continue;
+void find_answer(){
+  //melting
+  int water_size = water.size();
+  int y, x, ny, nx;
+  while(water_size){
+    tie(y,x) = water.front(); water.pop();
+    visited[y][x] = true;
+    for(int i = 0; i < 4; i++){
+      ny = y + dy[i]; nx = x + dx[i];
+      if(ny < 0 || ny >= R || nx < 0 || nx >= C) continue;
+      if(visited[ny][nx]) continue;
+      // visited[ny][nx] = true;
+      if(lake[ny][nx] == 'X'){
+        lake[ny][nx] = '.';
+        water.push({ny,nx});
+        continue;
+      }
     }
-    find_answer(ny,nx);
+    water_size--;
   }
 }
 
-bool still_apart(int y, int x){
-  visited[y][x] = true;
-  bool cont = true;
-  int ny, nx;
-  for(int i = 0; i < 4; i++){
-    ny = y + dy[i]; nx = x + dx[i];
-    // cout << "[" <<  ny << ", " << nx << "]\n";
-    if(ny == swan[1].first && nx == swan[1].second){
-      // cout << "FOUND: " << ny << ", " << nx << "\n"; 
-      return false;
+bool move(){
+  int y, x, ny, nx;
+  s.push({swan[0].first,swan[0].second});
+  while(s.size()){
+    tie(y,x) = s.front(); s.pop();
+    for(int i = 0; i < 4; i++){
+      ny = y + dy[i]; nx = x + dx[i];
+      if(ny < 0 || ny >= R || nx < 0 || nx >= C) continue;
+      if(visited_swan[ny][nx]) continue;
+      visited_swan[y][x] = true;
+
+      if(lake[ny][nx] == 'X'){
+        ns.push({ny,nx});
+      }
+      else if(lake[ny][nx] == 'L'){
+        return true;
+      }
+      else{
+        s.push({ny,nx});
+      }
     }
-    if(ny < 0 || ny >= R || nx < 0 || nx >= C) continue;
-    if(visited[ny][nx]) continue;
-    if(lake[ny][nx] != '.') continue;
-    visited[ny][nx] = true;
-    if(!still_apart(ny, nx)) return false;
   }
-  return true;
+  return false;
+}
+
+void clearQ(queue<pair<int,int>> &q){
+  queue<pair<int,int>> empty;
+  swap(q,empty);
 }
 
 int main(){
+  ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+
   cin >> R >> C;
   string input;
   for(int i = 0; i < R; i++){
     cin >> input;
     for(int j = 0; j < C; j++){
       lake[i][j] = input[j];
-      if(input[j] == 'L') swan.push_back({i,j});
+      if(input[j] == '.'|| input[j] == 'L') water.push({i,j});
+      // else if(input[j] == 'X') ice.push({i,j});
+      else if(input[j] == 'L') swan.push_back({i,j});
     }
   }
 
   int answer = 0;
 
-  bool still = still_apart(swan[0].first,swan[0].second);
-  while(still){
-    // cout <<"CONT " << answer << "\n";
-  // while(answer < 3){
-    fill(&visited[0][0], &visited[0][0]+2250000,0);
+  // bool still = still_apart();
+  while(true){
+    if(move()) break;
+    // cout << "END MOVE\n";
+    swap(s,ns);
+    clearQ(ns);
 
-    for(int i = 0; i < R; i++){
-      for(int j = 0; j < C; j++){
-        if(lake[i][j] != '.') continue;
-        if(visited[i][j]) continue;
-        find_answer(i,j);
-      }
-    }
+    find_answer();
 
     // cout << "\n";
     // for(int i = 0; i < R; i++){
     //   for(int j = 0; j < C; j++){
-    //     cout << lake[i][j];
+    //     cout << lake[i][j] << " ";
     //   }cout << "\n";
     // }
-
-    fill(&visited[0][0], &visited[0][0]+2250000,0);
-
-    still = still_apart(swan[0].first,swan[0].second);
-    // cout << "STILL " << still << "\n";
     answer++;
   }
 
