@@ -21,25 +21,25 @@ void find_answer(){
   int y, x, ny, nx;
   while(water_size){
     tie(y,x) = water.front(); water.pop();
-    visited[y][x] = true;
+    water_size--;
+    // cout << y << ", " << x << "\n";
     for(int i = 0; i < 4; i++){
       ny = y + dy[i]; nx = x + dx[i];
       if(ny < 0 || ny >= R || nx < 0 || nx >= C) continue;
       if(visited[ny][nx]) continue;
-      // visited[ny][nx] = true;
+
       if(lake[ny][nx] == 'X'){
+        visited[ny][nx] = true;
         lake[ny][nx] = '.';
         water.push({ny,nx});
-        continue;
       }
     }
-    water_size--;
   }
 }
 
 bool move(){
   int y, x, ny, nx;
-  s.push({swan[0].first,swan[0].second});
+
   while(s.size()){
     tie(y,x) = s.front(); s.pop();
     for(int i = 0; i < 4; i++){
@@ -76,44 +76,27 @@ int main(){
     cin >> input;
     for(int j = 0; j < C; j++){
       lake[i][j] = input[j];
-      if(input[j] == '.'|| input[j] == 'L') water.push({i,j});
-      // else if(input[j] == 'X') ice.push({i,j});
-      else if(input[j] == 'L') swan.push_back({i,j});
+      if(input[j] == '.'|| input[j] == 'L'){
+        visited[i][j] = true; 
+        water.push({i,j});
+      }
+      if(input[j] == 'L') swan.push_back({i,j});
     }
   }
 
-  int answer = 0;
+  s.push({swan[0].first,swan[0].second});
+  visited_swan[swan[0].first][swan[0].second] = true;
 
-  // bool still = still_apart();
+  int answer = 0;
   while(true){
     if(move()) break;
-    // cout << "END MOVE\n";
-    swap(s,ns);
+    s = ns;
     clearQ(ns);
 
     find_answer();
 
-    // cout << "\n";
-    // for(int i = 0; i < R; i++){
-    //   for(int j = 0; j < C; j++){
-    //     cout << lake[i][j] << " ";
-    //   }cout << "\n";
-    // }
     answer++;
   }
 
   std::cout << answer;
 }
-
-/*
-8 17
-...XXXXXX..XX.XXX
-....XXXXXXXXX.XXX
-...XXXXXXXXXXXX..
-..XXXXX..XXXXXX..
-.XXXXXX..XXXXXX..
-XXXXXXX...XXXX...
-..XXXXX...XXX....
-....XXXXX.XXX....
-
-*/
