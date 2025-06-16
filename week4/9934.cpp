@@ -1,15 +1,15 @@
 #include <iostream>
-#include <vector>
 #include <queue>
 #include <tuple>
+#include <cmath>
 
 using namespace std;
 
 int K;
-int *buildings;
-int visited[1025];
+int buildings[1025], visited[1025];
 queue<pair<int,int>> answer;
 //1 ~ 2^K-1
+
 
 void find_answer(int left, int right){
   answer.push({left,right});
@@ -21,7 +21,6 @@ void find_answer(int left, int right){
     answer_size--;
     mid = l + int(r-l)/2; 
     // cout << "[" << l << ", " << r << "] " << mid << "\n";
-    //visited
     if(visited[mid]) continue;
 
     visited[mid] = 1;
@@ -41,8 +40,8 @@ void find_answer(int left, int right){
 
 
 int main(){
+  ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
   cin >> K;
-  buildings = new int[K];
   for(int i = 0; i < pow(2,K)-1; i++){
     cin >> buildings[i];
   }
